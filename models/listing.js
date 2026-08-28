@@ -1,0 +1,20 @@
+const { default: mongoose } = require("mongoose");
+const mngoose=require("mongoose");
+
+const Schema=mongoose.Schema;
+
+const listingSchema=new Schema({
+    title:
+    {type:String,
+     required:true,},
+     
+    description:String,
+    image:String,
+    price:Number,
+    location:String,
+    country:String,
+});
+
+const Listing=mongoose.model("Listing",listingSchema);
+
+modules.export=Listing;
