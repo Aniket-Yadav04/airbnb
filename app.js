@@ -3,6 +3,8 @@ const app=express();
 
 const mongoose=require("mongoose");
 
+const Listing=require("./models/listing.js")
+
 
  const mongoUrl="mongodb://127.0.0.1:27017/wanderlust";
 
@@ -27,6 +29,19 @@ const mongoose=require("mongoose");
 app.get("/",(req,res)=>{
     res.send("You are on Root");
 })
+
+app.get("/testListing", async (req,res)=>{
+     let sampleListing=new Listing({
+        title:"My New villa",
+        description:"by the beach",
+        price:1200,
+        location:"calangut , Goa",
+        country:"India",
+     });
+      await sampleListing.save();
+      console.log("sample was saved");
+      res.send("succesful testing");
+});
 
 const port=8080;
 app.listen(port,()=>{

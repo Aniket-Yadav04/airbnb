@@ -9,7 +9,12 @@ const listingSchema=new Schema({
      required:true,},
      
     description:String,
-    image:String,
+    image:{
+        filename:String,
+        // default: "https://unsplash.com/photos/stone-path-through-banana-trees-xlAfCD2vOxQ",
+        // set:(v)=>v===""?"https://unsplash.com/photos/stone-path-through-banana-trees-xlAfCD2vOxQ "
+        // : v,
+     },
     price:Number,
     location:String,
     country:String,
@@ -17,4 +22,4 @@ const listingSchema=new Schema({
 
 const Listing=mongoose.model("Listing",listingSchema);
 
-modules.export=Listing;
+module.exports=Listing;
