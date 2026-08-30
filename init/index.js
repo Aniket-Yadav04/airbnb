@@ -23,11 +23,11 @@ const Listing = require("../models/listing.js");
     }
 }
 
-const initDB= async()=>{
-    await Listing.deleteMany({});
-    await Listing.insertMany(data.data);
-    console.log("data was initialise");
+// const initDB= async()=>{
+//     await Listing.deleteMany({});
+//     await Listing.insertMany(data.data);
+//     console.log("data was initialise");
 
-}
+// }
 
-initDB();
+// initDB();
