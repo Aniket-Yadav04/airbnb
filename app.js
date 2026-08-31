@@ -2,11 +2,16 @@ const express=require("express");
 const app=express();
 const path=require("path");
 const mongoose=require("mongoose");
+let methodOverride = require('method-override')
 
 const Listing=require("./models/listing.js")
 
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
+app.use(express.urlencoded({extended:true}));
+app.use(methodOverride('_method'));
+
+
 
 
  const mongoUrl="mongodb://127.0.0.1:27017/wanderlust";
@@ -29,15 +34,85 @@ app.set("views",path.join(__dirname,"views"));
     }
 }
 
-app.get("/",(req,res)=>{
-    res.send("You are on Root");
-})
+// app.get("/",(req,res)=>{
+//     res.send("You are on Root");
+// });
 
-
+//index route
 app.get("/listings",async (req,res)=>{
     const allListings=await Listing.find({});
     res.render("listings/index.ejs",{allListings});
-})
+});
+
+//{new Get Route
+app.get("/listings/new", (req,res)=>{
+    res.render("listings/new.ejs");
+});
+
+//post route adding new listing
+app.post("/listings",async(req,res)=>{
+   const newListing= new Listing(req.body.listing);
+   await newListing.save();
+   res.redirect("/listings");
+});//}
+
+
+
+//{edit route
+app.get("/listings/:id/edit", async (req,res)=>{
+       let {id}=req.params;
+    const listing= await Listing.findById(id);
+    res.render("listings/edit.ejs",{listing});
+
+
+});
+
+//update Route
+app.put("/listings/:id",async (req,res)=>{
+      let {id}=req.params;
+      const newUpdatedData=req.body.listing;
+    // await Listing.findByIdAndUpdate(id,{...req.body.listing})
+       await Listing.findByIdAndUpdate(id,newUpdatedData);
+      res.redirect("/listings");
+
+});
+
+//delete Route
+
+app.delete("/listings/:id",async(req,res)=>{
+     let {id}=req.params;
+await Listing.findByIdAndDelete(id);
+  res.redirect("/listings");
+});
+
+
+
+
+
+//show route
+app.get("/listings/:id",async (req,res)=>{
+    let {id}=req.params;
+    const listing= await Listing.findById(id);
+    res.render("listings/show.ejs",{listing});
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // app.get("/testListing", async (req,res)=>{
 //      let sampleListing=new Listing({

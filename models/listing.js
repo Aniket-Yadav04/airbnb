@@ -10,10 +10,17 @@ const listingSchema=new Schema({
      
     description:String,
     image:{
-        filename:String,
-        // default: "https://unsplash.com/photos/stone-path-through-banana-trees-xlAfCD2vOxQ",
-        // set:(v)=>v===""?"https://unsplash.com/photos/stone-path-through-banana-trees-xlAfCD2vOxQ "
-        // : v,
+        filename:{
+            type:String,
+            default:"listingimage"
+        },
+        url:{
+            type:String,
+        
+        default: "https://unsplash.com/photos/stone-path-through-banana-trees-xlAfCD2vOxQ",
+        set:(v)=>v===""?"https://unsplash.com/photos/stone-path-through-banana-trees-xlAfCD2vOxQ "
+        : v,
+        }
      },
     price:Number,
     location:String,
