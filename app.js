@@ -3,13 +3,21 @@ const app=express();
 const path=require("path");
 const mongoose=require("mongoose");
 let methodOverride = require('method-override')
+const ejsMate=require("ejs-mate");
+
+
 
 const Listing=require("./models/listing.js")
 
+
 app.set("view engine","ejs");
+app.engine('ejs',ejsMate);
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname,"/public")));
+
+
 
 
 
@@ -34,9 +42,9 @@ app.use(methodOverride('_method'));
     }
 }
 
-// app.get("/",(req,res)=>{
-//     res.send("You are on Root");
-// });
+app.get("/",(req,res)=>{
+    res.send("You are on Root");
+});
 
 //index route
 app.get("/listings",async (req,res)=>{

@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<%- layout('/layouts/boilerplate') %>
 <body>
     <h3>All Listings</h3>
     <ul>
@@ -13,11 +7,10 @@
     <li><a href="/listings/<%=listing._id %>"><%= listing.title %></a></li>
 <% } %>
     </ul>
-    <form action="listings/new" method="get">
+    <!-- <form action="listings/new" method="get">
        <button>Create New Listing </button>
-    </form>
+    </form> -->
     
     <script src=""></script>
 </body>
-</html>
 
