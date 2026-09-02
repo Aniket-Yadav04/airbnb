@@ -78,9 +78,11 @@ app.get("/listings/:id/edit", async (req,res)=>{
 //update Route
 app.put("/listings/:id",async (req,res)=>{
       let {id}=req.params;
+      console.log(id);
       const newUpdatedData=req.body.listing;
     // await Listing.findByIdAndUpdate(id,{...req.body.listing})
        await Listing.findByIdAndUpdate(id,newUpdatedData);
+       console.log(newUpdatedData);
       res.redirect("/listings");
 
 });
