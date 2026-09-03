@@ -16,7 +16,6 @@ const listingSchema=new Schema({
         },
         url:{
             type:String,
-        
         default: "https://unsplash.com/photos/stone-path-through-banana-trees-xlAfCD2vOxQ",
         set:(v)=>v===""?"https://unsplash.com/photos/stone-path-through-banana-trees-xlAfCD2vOxQ "
         : v,
