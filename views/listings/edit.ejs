@@ -9,6 +9,7 @@
 <body>
     <h2>Edit Your Details</h2>
     <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" >
+      
         <input type="text" value="<%=listing.title %>" name="listing[title]"/>
         <br>
         <br>
@@ -25,7 +26,6 @@
          <br>
          <br>
           <input name="listing[country]" value="<%=listing.country %>" type="text" />
-          <br>
           <br>
          <button>ADD</button>
     </form>
