@@ -11,7 +11,7 @@
 <div class="col-8 offset-2">
  
     <h2>Edit Your Details</h2>
-    
+
     <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" >
       
         <div class="mb-3 ">
@@ -22,7 +22,7 @@
         <br>
          <div class="mb-3">
              <label for="description" class="form-label" >Description</label>
-           <textarea cols="10" name="listing[description]" rows="5" class="form-control"><%=listing.description %></textarea>
+           <textarea cols="10" name="listing[description]" rows="3" class="form-control"><%=listing.description %></textarea>
          </div>
        
         <br>
