@@ -16,13 +16,23 @@
         <br><br>
         <div class="mb-3">
          <label for="title" class="form-label">Title</label>
-         <input type="text" class="form-control" placeholder="Add a Catchy Title" name="listing[title]">
+         <input type="text" class="form-control" 
+         placeholder="Add a Catchy Title"
+          name="listing[title]" required/>
+
+         <div class="valid-feedback">
+        Title looks good!
         </div>
+
+        </div>
+        
          
         <div class="mb-3">
             <label for="description" >Description</label>
              <textarea cols="5" class="form-control" required name="listing[description]" rows="3" placeholder="Enter description here!"></textarea>
-
+              <div class="invalid-feedback">
+         Please Enter Short Description
+        </div>
         </div>
 
         <div class="mb-3">
@@ -36,20 +46,28 @@
         <div>
         <div class="mb-3 col-md-4">
             <label for="price" >Price</label>
-             <input name="listing[price]" class="form-control"   type="number" placeholder="1200" required>
-             </div>
+            <input name="listing[price]" class="form-control"   type="number" placeholder="1200" required>
+               <div class="invalid-feedback">
+            Please Enter The Valid Price
+        </div>
+        </div>
              
              <div class="mb-3 col-md-8">
             <label for="country">Country</label>
             <input name="listing[country]" required class="form-control" type="text" placeholder="India">
+             <div class="invalid-feedback">
+                Please enter valid country name
              </div>
-
+        </div>
          </div>
 
           
         <div class="mb-3">
             <label for="location"  >Location</label>
             <input name="listing[location]" required class="form-control"   type="text" placeholder="Jaipur,Rajasthan">
+        <div class="invalid-feedback">
+            Please Enter Valid Location
+        </div>
         </div>
         
          <br>
