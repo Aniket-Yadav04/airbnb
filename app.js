@@ -12,7 +12,8 @@ const Joi = require('joi');
 const wrapAsync=require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js");
 
-
+//joi schema
+const {listingSchema}=require("./schema.js");
 
 const Listing=require("./models/listing.js")
 
@@ -53,6 +54,19 @@ app.get("/",(req,res)=>{
     res.send("You are on Root");
 });
 
+const validateListing=(req,res,next)=>{
+    let {error}=listingSchema.validate(req.body);
+if(error){
+    let errMsg=error.details.map((el)=>el.message).join(",");
+    throw new ExpressError(400,error);
+}else{
+    next();
+}
+};
+
+
+
+
 //index route
 app.get("/listings",wrapAsync(async (req,res)=>{
     const allListings=await Listing.find({});
@@ -65,20 +79,10 @@ app.get("/listings/new", (req,res)=>{
 });
 
 // "Creating New Route"
-app.post("/listings",wrapAsync(async(req,res,next)=>{
-    if(!req.body.listing){
-       throw new ExpressError(400,"Data not found")
-    }
+app.post("/listings",validateListing,wrapAsync(async(req,res,next)=>{
+ 
    const newListing= new Listing(req.body.listing);
-   if(!newListing.description){
-    throw new ExpressError(402,"Description is missing")
-   }
-    if(!newListing.location){
-    throw new ExpressError(403,"Location is missing")
-   }
-    if(!newListing.country){
-    throw new ExpressError(404,"country is missing")
-   }
+
    await newListing.save();
    res.redirect("/listings");
 
@@ -96,7 +100,7 @@ app.get("/listings/:id/edit",wrapAsync( async (req,res)=>{
 }));
 
 //update Route
-app.put("/listings/:id",wrapAsync(async (req,res)=>{
+app.put("/listings/:id",validateListing,wrapAsync(async (req,res)=>{
       if(!req.body.listing){
        throw new ExpressError(400,"Data not found")
     }
@@ -105,7 +109,7 @@ app.put("/listings/:id",wrapAsync(async (req,res)=>{
       const newUpdatedData=req.body.listing;
     // await Listing.findByIdAndUpdate(id,{...req.body.listing})
        await Listing.findByIdAndUpdate(id,newUpdatedData);
-       console.log(newUpdatedData);
+    //    console.log(newUpdatedData);
       res.redirect("/listings");
 
 }));
@@ -131,21 +135,16 @@ app.get("/listings/:id",wrapAsync(async (req,res)=>{
 
 
 
+
+// ERROR middleWare for all routes 
+
 app.use((req,res,next)=>{
     next(new ExpressError(404,"Page Not Found"));
 });
 
 
 
-
-
-
-
-
-
-
-
-
+//Error middleware 
 app.use((err,req,res,next)=>{
     let {statusCode=500,message="some thing wrong"}=err
      res.render("error.ejs",{err});
