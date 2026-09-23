@@ -13,10 +13,13 @@ const wrapAsync=require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js");
 
 //joi schema
-const {listingSchema}=require("./schema.js");
+const {listingSchema,reviewSchema}=require("./schema.js");
 
 const Listing=require("./models/listing.js")
 
+//reviews model
+const review=require("./models/review.js");
+// const Review = require("./models/review.js");
 
 app.set("view engine","ejs");
 app.engine('ejs',ejsMate);
@@ -62,6 +65,16 @@ if(error){
 }else{
     next();
 }
+};
+
+const validateReview=(req,res,next)=>{
+    let {error}=reviewSchema.validate(req.body);
+    if(error){
+        let errMsg=error.details.map((el)=>el.message).join(",");
+         throw new ExpressError(404,error);    
+    }else{
+        next();
+    }
 };
 
 
@@ -123,13 +136,27 @@ await Listing.findByIdAndDelete(id);
 }));
 
 
+//Reviews
+//post route
 
+app.post("/listings/:id/reviews",validateReview,wrapAsync(async(req,res)=>{
+   let listing =  await Listing.findById(req.params.id)
+   let newReview= new review(req.body.review);
+
+   listing.reviews.push(newReview);
+   await newReview.save();
+   await listing.save();
+   
+   console.log("new reviews added")
+   res.redirect(`/listings/${listing._id}`);
+
+}));
 
 
 //show route
 app.get("/listings/:id",wrapAsync(async (req,res)=>{
     let {id}=req.params;
-    const listing= await Listing.findById(id);
+    const listing= await Listing.findById(id).populate("reviews");
     res.render("listings/show.ejs",{listing});
 }));
 

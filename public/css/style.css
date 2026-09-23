@@ -61,8 +61,8 @@ body{
     
 }
 
-.card{
-    border: none;
+.listing-card{
+    border: none  !important;
     margin-bottom: 2rem; 
 
 }
