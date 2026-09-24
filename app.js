@@ -18,7 +18,9 @@ const {listingSchema,reviewSchema}=require("./schema.js");
 const Listing=require("./models/listing.js")
 
 //reviews model
-const review=require("./models/review.js");
+// const review=require("./models/review.js");
+const { wrap } = require("module");
+const Review = require("./models/review.js");
 // const Review = require("./models/review.js");
 
 app.set("view engine","ejs");
@@ -135,13 +137,20 @@ await Listing.findByIdAndDelete(id);
   res.redirect("/listings");
 }));
 
+//show route
+app.get("/listings/:id",wrapAsync(async (req,res)=>{
+    let {id}=req.params;
+    const listing= await Listing.findById(id).populate("reviews");
+    res.render("listings/show.ejs",{listing});
+}));
+
 
 //Reviews
 //post route
 
 app.post("/listings/:id/reviews",validateReview,wrapAsync(async(req,res)=>{
    let listing =  await Listing.findById(req.params.id)
-   let newReview= new review(req.body.review);
+   let newReview= new Review(req.body.review);
 
    listing.reviews.push(newReview);
    await newReview.save();
@@ -153,13 +162,18 @@ app.post("/listings/:id/reviews",validateReview,wrapAsync(async(req,res)=>{
 }));
 
 
-//show route
-app.get("/listings/:id",wrapAsync(async (req,res)=>{
-    let {id}=req.params;
-    const listing= await Listing.findById(id).populate("reviews");
-    res.render("listings/show.ejs",{listing});
-}));
 
+
+//DELETE REVIEW ROUTE
+
+app.delete("/listings/:id/reviews/:reviewId",wrapAsync(async(req,res)=>{
+    let{id, reviewId}=req.params;
+     await Listing.findByIdAndUpdate(id,{$pull:{review:reviewId}}) 
+    let deleteData= await Review.findByIdAndDelete(reviewId);
+    //  console.log(deleteData)
+    res.redirect(`/listings/${id}`);
+
+}))
 
 
 
