@@ -6,8 +6,10 @@ let methodOverride = require('method-override')
 const ejsMate=require("ejs-mate");
 //Error handling middleware
 const ExpressError=require("./utils/ExpressError.js");
+const cookieParser = require("cookie-parser");
 
-// const Listing=require("./models/listing.js")
+//express session
+const session = require("express-session");
 
 //reviews model
 // const review=require("./models/review.js");
@@ -50,10 +52,43 @@ app.get("/",(req,res)=>{
 });
 
 
-app.get("/cookies",(req,res)=>{
-    res.cookie("Rahul","512");
-    res.send("You are on Root");
-});
+// app.get("/root",(req,res)=>{
+//     res.cookie("greet","namaste");
+//     res.send("your cookies are being collected");
+// })
+
+// app.use(cookieParser("secretcode"));
+
+// app.get("/cookies",(req,res)=>{
+//   let data= req.cookies
+//   console.dir(data);
+//     res.send("You are on Root");
+// });
+
+// app.get("/greet",(req,res)=>{
+//     let {name}=req.cookies;
+//     res.send(`${name}  Namaste welcome on board`);
+    
+// })
+
+// app.get("/getssignedcookie",(req,res)=>{
+//     res.cookie("color","red",{signed:true});
+//     res.send("signed cookies send");
+
+// });
+
+// app.get("/verify",(req,res)=>{
+//     console.log(req.signedCookies);
+//     res.send("verified");
+
+// }
+// )
+
+
+
+
+
+
 //caling routes 
 app.use("/listings",listingRoute);
 app.use("/listings/:id/reviews",reviewsRoute);
