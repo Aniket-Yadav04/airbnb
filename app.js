@@ -8,7 +8,7 @@ const ejsMate=require("ejs-mate");
 const ExpressError=require("./utils/ExpressError.js");
 const cookieParser = require("cookie-parser");
 
-//express session
+//express - session
 const session = require("express-session");
 
 //reviews model
@@ -20,6 +20,9 @@ const { wrap } = require("module");
 const listingRoute=require("./routes/listingRoutes.js");
 const reviewsRoute=require("./routes/reviewsRoute.js");
 
+//connect-flash 
+ const flash = require('connect-flash');
+const { expression } = require("joi");
 
 app.set("view engine","ejs");
 app.engine('ejs',ejsMate);
@@ -50,6 +53,62 @@ app.use(express.static(path.join(__dirname,"/public")));
 app.get("/",(req,res)=>{
     res.send("You are on Root");
 });
+
+// app.use(session(
+//     {
+//     secret:"mysupersecretstring",
+//     resave:false,
+//     saveUninitialized:true}));
+
+
+//  Express-  SESSION 
+const sessionOption={
+    secret:"mysupersecretstring",
+    resave:false,
+    saveUninitialized:true
+};
+app.use(session(sessionOption));
+app.use(flash());
+
+app.get("/register",(req,res)=>{
+    let {name="anonymus"}=req.query;
+    req.session.name=name;
+   
+    console.log(req.session.name);
+    req.flash("success","user register succesfully");
+    res.redirect("/hello");
+});
+
+app.get("/hello",(req,res)=>{
+    res.locals.message=req.flash("success")
+    res.render("views.ejs",{name:req.session.name});
+    // res.send(`hellow, ${req.session.name}`);
+
+});
+
+    // req count using express session
+// app.get("/reqcount",(req,res)=>{
+//     if(req.session.count){
+//         req.session.count++
+//     }else{
+//       req.session.count=1;
+//     }
+   
+//      res.send(`You sent a request ${req.session.count} times`);
+// })
+
+
+
+
+// app.get("/test",(req,res)=>{
+//     res.send("test sucssefull");
+// })
+
+
+
+
+
+
 
 
 // app.get("/root",(req,res)=>{
