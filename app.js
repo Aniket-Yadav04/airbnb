@@ -19,7 +19,12 @@ const { wrap } = require("module");
 // Routes require from Folder
 const listingRoute=require("./routes/listingRoutes.js");
 const reviewsRoute=require("./routes/reviewsRoute.js");
+const userRoute=require("./routes/userRoute.js");
 
+// passport for authentication
+const passport=require("passport");
+const LocalStrategy=require("passport-local");
+const User=require("./models/user.js")
 //connect-flash 
  const flash = require('connect-flash');
 const { expression } = require("joi");
@@ -67,12 +72,30 @@ const sessionOption={
 app.use(session(sessionOption));
 app.use(flash());
 
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
 //calling sessions & flash()
 app.use((req,res,next)=>{
    res.locals.success=req.flash("success");
    res.locals.error=req.flash("error");
    next();
 });
+
+app.get("/demouser",async (req,res)=>{
+   let fakeuser=new User({
+    email:"fakeuser@gmail.com",
+    username:"delta-student"
+   });
+     let registerduser=await User.register(fakeuser,"hellowworld");
+      res.send(registerduser);
+    })
 
 app.get("/",(req,res)=>{
     res.send("You are on Root");
@@ -81,6 +104,7 @@ app.get("/",(req,res)=>{
 //caling routes 
 app.use("/listings",listingRoute);
 app.use("/listings/:id/reviews",reviewsRoute);
+app.use("",userRoute);
 
 
 
@@ -102,3 +126,4 @@ const port=8080;
 app.listen(port,()=>{
     console.log(`Listining on port number ${port}`)
 });
+
