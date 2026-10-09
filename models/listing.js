@@ -3,8 +3,8 @@ const mongoose=require("mongoose");
 
 const Schema=mongoose.Schema;
 
-const Review=require("./review.js")
-
+const Review=require("./review.js");
+const user=require("./user.js");
 const listingSchema=new Schema({
     title:
     {type:String,
@@ -31,7 +31,11 @@ const listingSchema=new Schema({
             type:Schema.Types.ObjectId,
             ref:"Review"
         }
-    ]
+    ],
+    owner:{
+        type:Schema.Types.ObjectId,
+        ref:"user"
+    },
 });
 
 listingSchema.post("findOneAndDelete",async(listing)=>{

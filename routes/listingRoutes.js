@@ -7,6 +7,8 @@ const ExpressError=require("../utils/ExpressError.js");
 
 const Joi = require('joi');
 
+//authenticator
+const {isLoggedin}=require("../middleware.js");
 //validators
 const {listingSchema,reviewSchema}=require("../schema.js");
 
@@ -35,12 +37,16 @@ router.get("/",wrapAsync(async (req,res)=>{
 }));
 
 //{new Get Route
-router.get("/new", (req,res)=>{
-    res.render("listings/new.ejs");
+router.get("/new",isLoggedin, (req,res)=>{
+    
+  
+          res.render("listings/new.ejs");
+    
+   
 });
 
 // "Creating New Route"
-router.post("/",validateListing,wrapAsync(async(req,res,next)=>{
+router.post("/",validateListing,isLoggedin,wrapAsync(async(req,res,next)=>{
  
    const newListing= new Listing(req.body.listing);
 
@@ -53,7 +59,7 @@ router.post("/",validateListing,wrapAsync(async(req,res,next)=>{
 
 
 //{edit route
-router.get("/:id/edit",wrapAsync( async (req,res)=>{
+router.get("/:id/edit",isLoggedin,wrapAsync( async (req,res)=>{
        let {id}=req.params;
     const listing= await Listing.findById(id);
      if(!listing){
@@ -68,7 +74,7 @@ router.get("/:id/edit",wrapAsync( async (req,res)=>{
 }));
 
 //update Route
-router.put("/:id",validateListing,wrapAsync(async (req,res)=>{
+router.put("/:id",validateListing,isLoggedin,wrapAsync(async (req,res)=>{
       if(!req.body.listing){
        throw new ExpressError(400,"Data not found")
     }
@@ -85,7 +91,7 @@ router.put("/:id",validateListing,wrapAsync(async (req,res)=>{
 
 //delete Route
 
-router.delete("/:id",wrapAsync(async(req,res)=>{
+router.delete("/:id",isLoggedin,wrapAsync(async(req,res)=>{
      let {id}=req.params;
 await Listing.findByIdAndDelete(id);
 req.flash("success","Listing deleted successfuly");
