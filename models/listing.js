@@ -4,7 +4,7 @@ const mongoose=require("mongoose");
 const Schema=mongoose.Schema;
 
 const Review=require("./review.js");
-const user=require("./user.js");
+const User=require("./user.js");
 const listingSchema=new Schema({
     title:
     {type:String,
@@ -34,7 +34,7 @@ const listingSchema=new Schema({
     ],
     owner:{
         type:Schema.Types.ObjectId,
-        ref:"user"
+        ref:"User"
     },
 });
 
