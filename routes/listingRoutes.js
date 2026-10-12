@@ -18,8 +18,7 @@ const Listing=require("../models/listing.js")
 const listingControllers=require("../controllers/listings.js");
 
     //{new Get Route
-router.get("/new",isLoggedin,
-     listingControllers.renderNewForm);
+router.get("/new",isLoggedin,listingControllers.renderNewForm);
 
 
 //index route

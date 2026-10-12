@@ -2,14 +2,19 @@
  const ExpressError=require("./utils/ExpressError.js");
  const Review=require("./models/review.js");
  const {listingSchema,reviewSchema}=require("./schema.js");
+
+
+
  module.exports.isLoggedin=(req,res,next)=>{
   if(!req.isAuthenticated()){
     req.session.redirectUrl=req.originalUrl;
        req.flash("error","you must be loged in to create listings!");
       return  res.redirect("/login");
     }
+    else{
 
         next();
+    }
     
 }
 
@@ -52,7 +57,7 @@ module.exports.validateReview=(req,res,next)=>{
     let {error}=reviewSchema.validate(req.body);
     if(error){
         let errMsg=error.details.map((el)=>el.message).join(",");
-         throw new ExpressError(404,error);    
+         throw new ExpressError(404,errMsg);    
     }else{
         next();
     }

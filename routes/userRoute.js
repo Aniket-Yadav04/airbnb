@@ -7,13 +7,15 @@ const {saveRedirectUrl}=require("../middleware.js")
 //controllers mvc
 const userController=require("../controllers/users.js");
 
+router.route("/signup")
+.get(userController.signupFormRender)
+.post(wrapAsync(userController.postNewUser));
 
-router.get("/signup",userController.signupFormRender);
-router.post("/signup",wrapAsync(userController.postNewUser));
-
-router.get("/login",userController.loginPageRender);
-router.post("/login",saveRedirectUrl,passport.authenticate("local",{failureRedirect:'/login',failureFlash:true}),
+router.route("/login")
+.get(userController.loginPageRender)
+.post(saveRedirectUrl,passport.authenticate("local",{failureRedirect:'/login',failureFlash:true}),
  userController.authenticateUser );
+
 
 
 router.get("/logout",userController.logoutUser);

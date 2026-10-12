@@ -25,6 +25,7 @@ const userRoute=require("./routes/userRoute.js");
 const passport=require("passport");
 const LocalStrategy=require("passport-local");
 const User=require("./models/user.js")
+const review=require("./models/review.js")
 //connect-flash 
  const flash = require('connect-flash');
 const { expression } = require("joi");
