@@ -16,16 +16,27 @@ const Listing=require("../models/listing.js")
 
 //require controllers
 const listingControllers=require("../controllers/listings.js");
+//Multer for file upload
+const multer  = require('multer')
 
+const {storage}=require("../cloudConfig.js");
+const upload = multer({storage})
     //{new Get Route
 router.get("/new",isLoggedin,listingControllers.renderNewForm);
+
+
+
+
+
 
 
 //index route
 router.route("/")
 .get(wrapAsync(listingControllers.index))
-.post(validateListing,isLoggedin,
-    wrapAsync(listingControllers.createNewListings));
+.post(isLoggedin,
+    upload.single('listing[image]'),
+    validateListing
+ , wrapAsync(listingControllers.createNewListings));
 
 
 router.route("/:id")

@@ -10,6 +10,11 @@ const cookieParser = require("cookie-parser");
 
 //express - session
 const session = require("express-session");
+if(process.env.NODE_ENV !="production"){
+require('dotenv').config();
+}
+
+
 
 //reviews model
 // const review=require("./models/review.js");

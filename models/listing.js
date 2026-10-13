@@ -12,16 +12,8 @@ const listingSchema=new Schema({
      
     description:String,
     image:{
-        filename:{
-            type:String,
-            default:"listingimage"
-        },
-        url:{
-            type:String,
-        default: "https://unsplash.com/photos/stone-path-through-banana-trees-xlAfCD2vOxQ",
-        set:(v)=>v===""?"https://unsplash.com/photos/stone-path-through-banana-trees-xlAfCD2vOxQ "
-        : v,
-        }
+        url:String,
+        filename:String,
      },
     price:Number,
     location:String,
