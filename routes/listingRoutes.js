@@ -41,7 +41,8 @@ router.route("/")
 
 router.route("/:id")
 .get(wrapAsync(listingControllers.showListings))
-.put(isOwner,isLoggedin,validateListing,wrapAsync(listingControllers.updateListings))
+.put(isOwner,isLoggedin,
+    upload.single('listing[image]'),validateListing,wrapAsync(listingControllers.updateListings))
 .delete(isOwner,isLoggedin,wrapAsync(listingControllers.deleteListings));
 
 // "Creating New Route"
