@@ -40,9 +40,16 @@ module.exports.updateListings=async (req,res)=>{
       if(!req.body.listing){
        throw new ExpressError(400,"Data not found")
     }
-         const {id} =req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing})
+         const {id}=req.params;
+ let listing=await Listing.findByIdAndUpdate(id,{...req.body.listing})
     //    console.log(newUpdatedData);
+
+    if(typeof req.file!=="undefind"){
+         let url=req.file.path;
+     let filename=req.file.filename;
+         listing.image={url,filename}
+          await listing.save();
+}
        req.flash("success","Listing Updated Successfuly")
       res.redirect("/listings");
 
@@ -54,9 +61,11 @@ module.exports.editListings=async (req,res)=>{
      if(!listing){
         req.flash("error"," Listing you requested for Does not exist");
         res.redirect("/listings");
-    }else{
-    res.render("listings/edit.ejs",{listing});
     }
+   let orignalimageUrl=listing.image.url;
+   orignalimageUrl=orignalimageUrl.replace("/upload","/upload/h_300,w_250")
+    res.render("listings/edit.ejs",{listing,orignalimageUrl});
+    
 };
 
 module.exports.createNewListings=async(req,res,next)=>{
